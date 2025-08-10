@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Search — Smart Search</title>
+  <style>
+    :root{
+      --muted:#5f6368;
+      --accent:#1a73e8;
+      --input-border:#dfe1e5;
+      font-family: 'Segoe UI', Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      color:#202124;
+      background: linear-gradient(135deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+    @keyframes gradientBG {
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+    .wrap{min-height:100%;display:flex;flex-direction:column}
+    main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px}
+    .center{width:100%;max-width:640px;text-align:center}
+    .logo{font-size:72px;font-weight:700;letter-spacing:-2px;margin-bottom:24px;color:white}
+    .logo .blue{color:var(--accent)}
+    .search-box{display:flex;align-items:center;background:#fff;border:1px solid var(--input-border);box-shadow:0 1px 6px rgba(32,33,36,0.08);padding:12px 16px;border-radius:24px}
+    .search-box input{flex:1;border:0;outline:0;font-size:18px;padding:8px}
+    .icons{display:flex;gap:8px;align-items:center}
+    .btn-row{margin-top:20px;display:flex;gap:12px;justify-content:center}
+    .btn{padding:10px 16px;border-radius:4px;border:1px solid var(--input-border);background:#f8f9fa;font-size:14px;cursor:pointer}
+    .btn.primary{background:var(--accent);color:white;border:none}
+    .muted{color:white;margin-top:28px;font-size:14px;text-shadow: 1px 1px 2px rgba(0,0,0,0.4)}
+    footer{padding:12px 24px;border-top:1px solid rgba(255,255,255,0.4);font-size:13px;color:white;text-align:center;text-shadow: 1px 1px 2px rgba(0,0,0,0.4)}
+    @media (max-width:420px){.logo{font-size:44px}.search-box{padding:10px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main>
+      <div class="center">
+        <div class="logo"><span class="blue">Smart</span> Search</div>
+        <form id="searchForm" class="search-block" onsubmit="return doSearch(event)">
+          <div class="search-box" role="search">
+            <input id="q" name="q" type="search" autocomplete="off" placeholder="Search the web (e.g. \"flower\")" aria-label="Search" />
+            <div class="icons" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21 21l-4.35-4.35" stroke="#5f6368" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="11" r="6" stroke="#5f6368" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button type="submit" class="btn primary">Search Google</button>
+            <button type="button" id="luckyBtn" class="btn">I'm Feeling Lucky</button>
+          </div>
+        </form>
+        <div class="muted">This page just forwards your search to Google and shows results in a new tab.</div>
+      </div>
+    </main>
+    <footer>
+      Local demo — static page. Not affiliated with Google.
+    </footer>
+  </div>
+  <script>
+    function openGoogleSearch(query, lucky = false){
+      if(!query) return;
+      const safe = encodeURIComponent(query.trim());
+      if(lucky){
+        const url = `https://www.google.com/search?q=${safe}&btnI=I`;
+        window.open(url, '_blank');
+        return;
+      }
+      const url = `https://www.google.com/search?q=${safe}`;
+      window.open(url, '_blank');
+    }
+    function doSearch(e){
+      e.preventDefault();
+      const q = document.getElementById('q').value;
+      openGoogleSearch(q, false);
+      return false;
+    }
+    document.getElementById('luckyBtn').addEventListener('click', ()=>{
+      const q = document.getElementById('q').value;
+      openGoogleSearch(q || '');
+    });
+    window.addEventListener('load', ()=> document.getElementById('q').focus());
+  </script>
+</body>
+</html>
+
